@@ -1578,6 +1578,30 @@ PrefabInstance:
       propertyPath: playerRenderer
       value: 
       objectReference: {fileID: 1037926513}
+    - target: {fileID: 1208062098986483296, guid: 4a7b2d9d4f91b124288ba854e0801689, type: 3}
+      propertyPath: hatPrefabs.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1208062098986483296, guid: 4a7b2d9d4f91b124288ba854e0801689, type: 3}
+      propertyPath: hatPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 696812819244106413, guid: 61710c9849729f6429c49edb7f71ba92, type: 3}
+    - target: {fileID: 1208062098986483296, guid: 4a7b2d9d4f91b124288ba854e0801689, type: 3}
+      propertyPath: hatPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 5735205615316963824, guid: f74497fd5f511e64aac2fd64a3cdd458, type: 3}
+    - target: {fileID: 1208062098986483296, guid: 4a7b2d9d4f91b124288ba854e0801689, type: 3}
+      propertyPath: hatPrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 5525988598047300568, guid: 3301ea583218cc34db78d5d4d0b1f82d, type: 3}
+    - target: {fileID: 1208062098986483296, guid: 4a7b2d9d4f91b124288ba854e0801689, type: 3}
+      propertyPath: hatPrefabs.Array.data[4]
+      value: 
+      objectReference: {fileID: 6941737594367212546, guid: 28f27e4b325e44b4697916b02308a8b0, type: 3}
+    - target: {fileID: 1208062098986483296, guid: 4a7b2d9d4f91b124288ba854e0801689, type: 3}
+      propertyPath: hatPrefabs.Array.data[5]
+      value: 
+      objectReference: {fileID: 8721392689285081043, guid: d2a661d1b390db346b001f6dba38b933, type: 3}
     - target: {fileID: 4618173547494312954, guid: 4a7b2d9d4f91b124288ba854e0801689, type: 3}
       propertyPath: m_Name
       value: Player

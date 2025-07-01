@@ -1285,6 +1285,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 681445109}
   m_CullTransparentMesh: 1
+--- !u!137 &709462743 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7404382858090448422, guid: 89e5f2a0713661d4fb2d852262b53a45, type: 3}
+  m_PrefabInstance: {fileID: 146328796055050557}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &797251303
 GameObject:
   m_ObjectHideFlags: 0
@@ -2598,11 +2603,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1569742996}
   m_CullTransparentMesh: 1
---- !u!137 &1629676698 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 5742658760318202352, guid: 89e5f2a0713661d4fb2d852262b53a45, type: 3}
-  m_PrefabInstance: {fileID: 146328796055050557}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1657455514
 GameObject:
   m_ObjectHideFlags: 0
@@ -2899,26 +2899,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d729f8c2499009458bc4a5b8a8ae9d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerRenderer: {fileID: 1629676698}
+  playerRenderer: {fileID: 709462743}
   hatSlot: {fileID: 1035854733}
   weaponSlot: {fileID: 1480489349}
   hatPrefabs:
+  - {fileID: 0}
   - {fileID: 696812819244106413, guid: 61710c9849729f6429c49edb7f71ba92, type: 3}
-  - {fileID: 6944015904337680714, guid: 5a18ab55b99f57d41bd00e6789d04549, type: 3}
-  - {fileID: 2367479449558425347, guid: d46d2c5ea0ef6cf4caf12e9c03be7286, type: 3}
   - {fileID: 5735205615316963824, guid: f74497fd5f511e64aac2fd64a3cdd458, type: 3}
+  - {fileID: 5525988598047300568, guid: 3301ea583218cc34db78d5d4d0b1f82d, type: 3}
   - {fileID: 6941737594367212546, guid: 28f27e4b325e44b4697916b02308a8b0, type: 3}
-  - {fileID: 5486581697183721723, guid: 1d0f911f72018a04b9ca0b9559c249ae, type: 3}
-  - {fileID: 7092232227945438344, guid: 29bad7f6e73ff434db1323ea47444ead, type: 3}
+  - {fileID: 8721392689285081043, guid: d2a661d1b390db346b001f6dba38b933, type: 3}
   weaponPrefabs:
   - {fileID: 919132149155446097, guid: 6083ff9012eefa348b00b8c543f1a742, type: 3}
   - {fileID: 919132149155446097, guid: ceffb78c74021304889ac584f173d156, type: 3}
   - {fileID: 919132149155446097, guid: 77de8014aff37804f92ab58c8817cced, type: 3}
-  playerColors:
-  - {r: 0.37981486, g: 0.6522207, b: 0.8867924, a: 0}
-  - {r: 0.7584905, g: 0.13595577, b: 0.13595577, a: 0}
-  - {r: 0.22081524, g: 0.5294118, b: 0.17254901, a: 0}
-  - {r: 0.83396226, g: 0.27536482, b: 0.7394391, a: 0}
+  colorPalette: {fileID: 11400000, guid: efb22fe4706bdd149914922bae86ff9b, type: 2}
 --- !u!4 &1688260080
 Transform:
   m_ObjectHideFlags: 0
@@ -3941,6 +3936,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Preview
       objectReference: {fileID: 0}
+    - target: {fileID: 5742658760318202352, guid: 89e5f2a0713661d4fb2d852262b53a45, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -4538140524563738714, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
+    - target: {fileID: 5742658760318202352, guid: 89e5f2a0713661d4fb2d852262b53a45, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5742658760318202352, guid: 89e5f2a0713661d4fb2d852262b53a45, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5742658760318202352, guid: 89e5f2a0713661d4fb2d852262b53a45, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 51fed7c9860a8fb49b18f63717ee1561, type: 2}
+    - target: {fileID: 7404382858090448422, guid: 89e5f2a0713661d4fb2d852262b53a45, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7404382858090448422, guid: 89e5f2a0713661d4fb2d852262b53a45, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 51fed7c9860a8fb49b18f63717ee1561, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -178,3 +178,22 @@ public class BotCharacter : Character
         Destroy(gameObject, 1f);
     }
 }
+
+
+public class Constants
+{
+    public class Tags
+    {
+        public const string PLAYER = "Player";
+        public const string BOT = "Bot";
+        public const string WEAPON = "Weapon";
+        public const string BULLET = "Bullet";
+    }
+     public class Animations
+    {
+        public const string IS_IDLE = "IsIdle";
+        public const string IS_RUN = "IsRun";
+        public const string IS_ATTACK = "IsAttack";
+        public const string IS_DEAD = "IsDead";
+    }
+}

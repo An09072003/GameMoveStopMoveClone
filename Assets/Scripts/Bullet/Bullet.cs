@@ -8,8 +8,24 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         startPoint = transform.position;
-        Destroy(gameObject, 1f); // Hủy sau 1 giây (dù có bay đến đâu)
+        Destroy(gameObject, 1f);
+
+        // Bỏ qua va chạm giữa đạn và các đạn khác
+        Collider myCollider = GetComponent<Collider>();
+        Bullet[] allBullets = FindObjectsOfType<Bullet>();
+
+        foreach (Bullet otherBullet in allBullets)
+        {
+            if (otherBullet == this) continue;
+
+            Collider otherCollider = otherBullet.GetComponent<Collider>();
+            if (otherCollider != null)
+            {
+                Physics.IgnoreCollision(myCollider, otherCollider);
+            }
+        }
     }
+
 
     private void OnCollisionEnter(Collision collision)
     {
