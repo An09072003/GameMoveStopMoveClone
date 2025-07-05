@@ -24,7 +24,7 @@ public class SelectionManager : MonoBehaviour
 
     void Start()
     {
-        // Load saved color from PlayerPrefs
+        // Load saved color
         if (PlayerPrefs.HasKey("PlayerColor") && colorPalette != null && colorPalette.colors.Length > 0)
         {
             string colorHex = PlayerPrefs.GetString("PlayerColor");
@@ -41,33 +41,30 @@ public class SelectionManager : MonoBehaviour
             }
         }
 
+        // Load saved hat and weapon
+        currentHatIndex = PlayerPrefs.GetInt("HatIndex", 0);
+        currentWeaponIndex = PlayerPrefs.GetInt("WeaponIndex", 0);
+
         UpdateAll();
     }
 
     // ================= COLOR =================
     public void NextPlayerColor()
     {
-        if (colorPalette == null)
+        if (colorPalette == null || colorPalette.colors.Length == 0)
         {
-            Debug.LogWarning("ColorPalette is null!");
-            return;
-        }
-
-        if (colorPalette.colors.Length == 0)
-        {
-            Debug.LogWarning("ColorPalette has no colors!");
+            Debug.LogWarning("ColorPalette is null or empty!");
             return;
         }
 
         currentColorIndex = (currentColorIndex + 1) % colorPalette.colors.Length;
-        Debug.Log("Switched to color index: " + currentColorIndex);
         UpdateColor();
     }
-
 
     public void PrevPlayerColor()
     {
         if (colorPalette == null || colorPalette.colors.Length == 0) return;
+
         currentColorIndex = (currentColorIndex - 1 + colorPalette.colors.Length) % colorPalette.colors.Length;
         UpdateColor();
     }
@@ -76,10 +73,20 @@ public class SelectionManager : MonoBehaviour
     {
         if (playerRenderer != null && colorPalette != null && colorPalette.colors.Length > 0)
         {
-            playerRenderer.material.color = colorPalette.colors[currentColorIndex];
+            Color selectedColor = colorPalette.colors[currentColorIndex];
 
+            // Gán màu
+            playerRenderer.material.color = selectedColor;
+
+            // Lưu màu
+            string colorHex = ColorUtility.ToHtmlStringRGB(selectedColor);
+            PlayerPrefs.SetString("PlayerColor", colorHex);
+            PlayerPrefs.Save();
+
+            Debug.Log("Applied & Saved Color: #" + colorHex);
         }
     }
+
 
     // ================= HAT =================
     public void NextHat()
@@ -106,15 +113,19 @@ public class SelectionManager : MonoBehaviour
             if (selectedHat != null)
             {
                 GameObject hat = Instantiate(selectedHat, hatSlot);
-                hat.transform.localPosition = Vector3.zero;
-                hat.transform.localRotation = Quaternion.identity;
-                hat.transform.localScale = Vector3.one;
+                //hat.transform.localPosition = Vector3.zero;
+                //hat.transform.localRotation = Quaternion.identity;
+                //hat.transform.localScale = Vector3.one;
                 currentHat = hat;
             }
             else
             {
                 currentHat = null;
             }
+
+            // Auto-save hat index
+            PlayerPrefs.SetInt("HatIndex", currentHatIndex);
+            PlayerPrefs.Save();
         }
     }
 
@@ -139,10 +150,14 @@ public class SelectionManager : MonoBehaviour
         if (weaponPrefabs.Length > 0)
         {
             GameObject weapon = Instantiate(weaponPrefabs[currentWeaponIndex], weaponSlot);
-            weapon.transform.localPosition = Vector3.zero;
-            weapon.transform.localRotation = Quaternion.identity;
-            weapon.transform.localScale = Vector3.one;
+            //weapon.transform.localPosition = Vector3.zero;
+            //weapon.transform.localRotation = Quaternion.identity;
+            //weapon.transform.localScale = Vector3.one;
             currentWeapon = weapon;
+
+            // Auto-save weapon index
+            PlayerPrefs.SetInt("WeaponIndex", currentWeaponIndex);
+            PlayerPrefs.Save();
         }
     }
 
@@ -154,18 +169,10 @@ public class SelectionManager : MonoBehaviour
         UpdateColor();
     }
 
-    // ================= SAVE & PLAY =================
+    // ================= PLAY =================
     public void SaveAndPlay()
     {
-        if (colorPalette != null && colorPalette.colors.Length > 0)
-        {
-            PlayerPrefs.SetString("PlayerColor", ColorUtility.ToHtmlStringRGB(colorPalette.colors[currentColorIndex]));
-        }
-
-        PlayerPrefs.SetInt("HatIndex", currentHatIndex);
-        PlayerPrefs.SetInt("WeaponIndex", currentWeaponIndex);
-        PlayerPrefs.Save();
-
+        // Không cần lưu lại nữa vì đã tự động lưu trong từng phần
         SceneManager.LoadScene("GameScene");
     }
 

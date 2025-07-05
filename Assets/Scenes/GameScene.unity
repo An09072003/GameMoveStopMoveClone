@@ -734,6 +734,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 737c1d905ac39d0488047b7be5b4b096, type: 3}
+--- !u!137 &875619754 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1078442731216958315, guid: 4a7b2d9d4f91b124288ba854e0801689, type: 3}
+  m_PrefabInstance: {fileID: 6487906140827586543}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &884518335
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1037,64 +1042,6 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 0}
   m_BuildHeightMesh: 0
---- !u!1 &1037926510 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4328551426026361646, guid: 4a7b2d9d4f91b124288ba854e0801689, type: 3}
-  m_PrefabInstance: {fileID: 6487906140827586543}
-  m_PrefabAsset: {fileID: 0}
---- !u!137 &1037926513
-SkinnedMeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1037926510}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 3
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  serializedVersion: 2
-  m_Quality: 0
-  m_UpdateWhenOffscreen: 0
-  m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 0}
-  m_Bones: []
-  m_BlendShapeWeights: []
-  m_RootBone: {fileID: 0}
-  m_AABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  m_DirtyAABB: 0
 --- !u!1 &1050254843
 GameObject:
   m_ObjectHideFlags: 0
@@ -1577,7 +1524,7 @@ PrefabInstance:
     - target: {fileID: 1208062098986483296, guid: 4a7b2d9d4f91b124288ba854e0801689, type: 3}
       propertyPath: playerRenderer
       value: 
-      objectReference: {fileID: 1037926513}
+      objectReference: {fileID: 875619754}
     - target: {fileID: 1208062098986483296, guid: 4a7b2d9d4f91b124288ba854e0801689, type: 3}
       propertyPath: hatPrefabs.Array.size
       value: 6
@@ -1623,10 +1570,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1236581510970662195, guid: 4a7b2d9d4f91b124288ba854e0801689, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1976834874}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4328551426026361646, guid: 4a7b2d9d4f91b124288ba854e0801689, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1037926513}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a7b2d9d4f91b124288ba854e0801689, type: 3}
 --- !u!4 &8923496200216619395 stripped
 Transform:

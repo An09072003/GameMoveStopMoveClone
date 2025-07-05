@@ -52,10 +52,6 @@ public class PlayerCharacter : Character
                     TriggerAttack();
                 }
             }
-            else
-            {
-                Debug.Log("No bot in range.");
-            }
         }
     }
 

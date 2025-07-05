@@ -20,6 +20,7 @@ public class PlayerSkinLoader : MonoBehaviour
         string colorHex = PlayerPrefs.GetString("PlayerColor", "FFFFFF");
         if (ColorUtility.TryParseHtmlString("#" + colorHex, out Color loadedColor))
         {
+            Debug.Log("Loaded Color: #" + colorHex);
             playerRenderer.material.color = loadedColor;
         }
 
@@ -28,9 +29,9 @@ public class PlayerSkinLoader : MonoBehaviour
         if (hatIndex >= 0 && hatIndex < hatPrefabs.Length)
         {
             GameObject hat = Instantiate(hatPrefabs[hatIndex], hatSlot);
-            hat.transform.localPosition = Vector3.zero;
-            hat.transform.localRotation = Quaternion.identity;
-            hat.transform.localScale = Vector3.one;
+            //hat.transform.localPosition = Vector3.zero;
+            //hat.transform.localRotation = Quaternion.identity;
+            //hat.transform.localScale = Vector3.one;
         }
 
         // Load vũ khí
@@ -38,9 +39,10 @@ public class PlayerSkinLoader : MonoBehaviour
         if (weaponIndex >= 0 && weaponIndex < weaponPrefabs.Length)
         {
             GameObject weapon = Instantiate(weaponPrefabs[weaponIndex], weaponSlot);
-            weapon.transform.localPosition = Vector3.zero;
-            weapon.transform.localRotation = Quaternion.identity;
-            weapon.transform.localScale = Vector3.one;
+            //weapon.transform.localPosition = Vector3.zero;
+            //weapon.transform.localRotation = Quaternion.identity;
+            //weapon.transform.localScale = Vector3.one;
         }
     }
+
 }
