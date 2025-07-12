@@ -4,91 +4,96 @@ using UnityEngine.SceneManagement;
 public class SelectionManager : MonoBehaviour
 {
     [Header("Preview References")]
-    public Renderer playerRenderer;
-    public Transform hatSlot;
-    public Transform weaponSlot;
+    [SerializeField] private Renderer playerRenderer;
+    [SerializeField] private Renderer pantsRenderer;
+    [SerializeField] private Transform hatSlot;
+    [SerializeField] private Transform weaponSlot;
 
     [Header("Hat Prefabs (Skin)")]
-    public GameObject[] hatPrefabs;
+    [SerializeField] private GameObject[] hatPrefabs;
     private int currentHatIndex = 0;
     private GameObject currentHat;
 
     [Header("Weapon Prefabs")]
-    public GameObject[] weaponPrefabs;
+    [SerializeField] private GameObject[] weaponPrefabs;
     private int currentWeaponIndex = 0;
     private GameObject currentWeapon;
 
-    [Header("Color Palette")]
-    public ColorPalette colorPalette;
+    [Header("Body Color Palette")]
+    [SerializeField] private ColorPalette colorPalette;
     private int currentColorIndex = 0;
+
+    [Header("Pants Materials")]
+    [SerializeField] private Material[] pantsMaterials;
+    private int currentPantsMaterialIndex = 0;
 
     void Start()
     {
-        // Load saved color
-        if (PlayerPrefs.HasKey("PlayerColor") && colorPalette != null && colorPalette.colors.Length > 0)
+        // Load saved selections
+        string colorHex = PlayerPrefs.GetString("PlayerColor", "FFFFFF");
+        if (ColorUtility.TryParseHtmlString("#" + colorHex, out Color savedColor))
         {
-            string colorHex = PlayerPrefs.GetString("PlayerColor");
-            if (ColorUtility.TryParseHtmlString("#" + colorHex, out Color savedColor))
+            for (int i = 0; i < colorPalette.colors.Length; i++)
             {
-                for (int i = 0; i < colorPalette.colors.Length; i++)
+                if (colorPalette.colors[i] == savedColor)
                 {
-                    if (colorPalette.colors[i] == savedColor)
-                    {
-                        currentColorIndex = i;
-                        break;
-                    }
+                    currentColorIndex = i;
+                    break;
                 }
             }
         }
 
-        // Load saved hat and weapon
         currentHatIndex = PlayerPrefs.GetInt("HatIndex", 0);
         currentWeaponIndex = PlayerPrefs.GetInt("WeaponIndex", 0);
+        currentPantsMaterialIndex = PlayerPrefs.GetInt("PantsMaterialIndex", 0);
 
         UpdateAll();
     }
 
-    // ================= COLOR =================
+    // ========== BODY COLOR ==========
     public void NextPlayerColor()
     {
-        if (colorPalette == null || colorPalette.colors.Length == 0)
-        {
-            Debug.LogWarning("ColorPalette is null or empty!");
-            return;
-        }
-
         currentColorIndex = (currentColorIndex + 1) % colorPalette.colors.Length;
         UpdateColor();
     }
 
     public void PrevPlayerColor()
     {
-        if (colorPalette == null || colorPalette.colors.Length == 0) return;
-
         currentColorIndex = (currentColorIndex - 1 + colorPalette.colors.Length) % colorPalette.colors.Length;
         UpdateColor();
     }
 
     void UpdateColor()
     {
-        if (playerRenderer != null && colorPalette != null && colorPalette.colors.Length > 0)
-        {
-            Color selectedColor = colorPalette.colors[currentColorIndex];
+        Color selectedColor = colorPalette.colors[currentColorIndex];
+        playerRenderer.material.color = selectedColor;
 
-            // Gán màu
-            playerRenderer.material.color = selectedColor;
-
-            // Lưu màu
-            string colorHex = ColorUtility.ToHtmlStringRGB(selectedColor);
-            PlayerPrefs.SetString("PlayerColor", colorHex);
-            PlayerPrefs.Save();
-
-            Debug.Log("Applied & Saved Color: #" + colorHex);
-        }
+        string colorHex = ColorUtility.ToHtmlStringRGB(selectedColor);
+        PlayerPrefs.SetString("PlayerColor", colorHex);
+        PlayerPrefs.Save();
     }
 
+    // ========== PANTS ==========
+    public void NextPants()
+    {
+        currentPantsMaterialIndex = (currentPantsMaterialIndex + 1) % pantsMaterials.Length;
+        UpdatePants();
+    }
 
-    // ================= HAT =================
+    public void PrevPants()
+    {
+        currentPantsMaterialIndex = (currentPantsMaterialIndex - 1 + pantsMaterials.Length) % pantsMaterials.Length;
+        UpdatePants();
+    }
+
+    void UpdatePants()
+    {
+        pantsRenderer.material = pantsMaterials[currentPantsMaterialIndex];
+        PlayerPrefs.SetInt("PantsMaterialIndex", currentPantsMaterialIndex);
+        PlayerPrefs.Save();
+    }
+
+    // ========== HAT ==========
     public void NextHat()
     {
         currentHatIndex = (currentHatIndex + 1) % hatPrefabs.Length;
@@ -103,33 +108,17 @@ public class SelectionManager : MonoBehaviour
 
     void UpdateHat()
     {
-        if (currentHat != null)
-            Destroy(currentHat);
+        if (currentHat != null) Destroy(currentHat);
+        if (hatPrefabs.Length == 0) return;
 
-        if (hatPrefabs.Length > 0)
-        {
-            GameObject selectedHat = hatPrefabs[currentHatIndex];
+        GameObject hat = Instantiate(hatPrefabs[currentHatIndex], hatSlot);
+        currentHat = hat;
 
-            if (selectedHat != null)
-            {
-                GameObject hat = Instantiate(selectedHat, hatSlot);
-                //hat.transform.localPosition = Vector3.zero;
-                //hat.transform.localRotation = Quaternion.identity;
-                //hat.transform.localScale = Vector3.one;
-                currentHat = hat;
-            }
-            else
-            {
-                currentHat = null;
-            }
-
-            // Auto-save hat index
-            PlayerPrefs.SetInt("HatIndex", currentHatIndex);
-            PlayerPrefs.Save();
-        }
+        PlayerPrefs.SetInt("HatIndex", currentHatIndex);
+        PlayerPrefs.Save();
     }
 
-    // ================= WEAPON =================
+    // ========== WEAPON ==========
     public void NextWeapon()
     {
         currentWeaponIndex = (currentWeaponIndex + 1) % weaponPrefabs.Length;
@@ -144,44 +133,50 @@ public class SelectionManager : MonoBehaviour
 
     void UpdateWeapon()
     {
-        if (currentWeapon != null)
-            Destroy(currentWeapon);
+        if (currentWeapon != null) Destroy(currentWeapon);
+        if (weaponPrefabs.Length == 0) return;
 
-        if (weaponPrefabs.Length > 0)
-        {
-            GameObject weapon = Instantiate(weaponPrefabs[currentWeaponIndex], weaponSlot);
-            //weapon.transform.localPosition = Vector3.zero;
-            //weapon.transform.localRotation = Quaternion.identity;
-            //weapon.transform.localScale = Vector3.one;
-            currentWeapon = weapon;
+        GameObject weapon = Instantiate(weaponPrefabs[currentWeaponIndex], weaponSlot);
+        currentWeapon = weapon;
 
-            // Auto-save weapon index
-            PlayerPrefs.SetInt("WeaponIndex", currentWeaponIndex);
-            PlayerPrefs.Save();
-        }
+        Rigidbody rb = weapon.GetComponent<Rigidbody>();
+        if (rb != null) rb.isKinematic = true;
+
+        Collider col = weapon.GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+
+        MonoBehaviour[] scripts = weapon.GetComponents<MonoBehaviour>();
+        foreach (var s in scripts) s.enabled = false;
+
+        PlayerPrefs.SetInt("WeaponIndex", currentWeaponIndex);
+        PlayerPrefs.Save();
     }
 
-    // ================= APPLY ALL =================
-    void UpdateAll()
+    // ========== SAVE & PLAY ==========
+    void SaveSelections()
     {
-        UpdateHat();
-        UpdateWeapon();
-        UpdateColor();
+        PlayerPrefs.SetInt("HatIndex", currentHatIndex);
+        PlayerPrefs.SetInt("WeaponIndex", currentWeaponIndex);
+        PlayerPrefs.SetInt("PantsMaterialIndex", currentPantsMaterialIndex);
+
+        Color selectedColor = colorPalette.colors[currentColorIndex];
+        string colorHex = ColorUtility.ToHtmlStringRGB(selectedColor);
+        PlayerPrefs.SetString("PlayerColor", colorHex);
+
+        PlayerPrefs.Save();
     }
 
-    // ================= PLAY =================
     public void SaveAndPlay()
     {
-        // Không cần lưu lại nữa vì đã tự động lưu trong từng phần
+        SaveSelections();
         SceneManager.LoadScene("GameScene");
     }
 
-    public void QuitGame()
+    void UpdateAll()
     {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        UpdateColor();
+        UpdatePants();
+        UpdateHat();
+        UpdateWeapon();
     }
 }

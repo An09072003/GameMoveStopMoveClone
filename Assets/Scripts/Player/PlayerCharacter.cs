@@ -4,20 +4,21 @@ using System.Collections;
 public class PlayerCharacter : Character
 {
     [Header("Joystick")]
-    public bl_Joystick Joystick;
-    public JoystickInputHandler joystickInputHandler;
+    [SerializeField] private bl_Joystick joystick;
+    [SerializeField] private JoystickInputHandler joystickInputHandler;
 
-    [Header("Attack Settings")]
-    public GameObject bulletPrefab;
-    public Transform firePoint;
-    public float bulletSpeed = 20f;
-    public float attackCooldown = 0.5f;
-    public float delayBeforeShoot = 0.3f;
+    [Header("Fire Settings")]
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private Transform weaponSlot;
+    [SerializeField] private float bulletSpeed = 20f;
+    [SerializeField] private float attackCooldown = 0.5f;
+    [SerializeField] private float delayBeforeShoot = 0.3f;
 
     [Header("Auto Aim Settings")]
-    public float aimRange = 5f;
+    [SerializeField] private float aimRange = 5f;
 
     private bool canAttack = true;
+    private bool isDead = false;
     private string currentAnimState = "";
 
     private void Update()
@@ -27,7 +28,9 @@ public class PlayerCharacter : Character
 
     public override void Tick()
     {
-        Vector3 input = new Vector3(Joystick.Horizontal, 0f, Joystick.Vertical);
+        if (isDead) return;
+
+        Vector3 input = new Vector3(joystick.Horizontal, 0f, joystick.Vertical);
         bool isMoving = joystickInputHandler != null && joystickInputHandler.isMoving;
 
         if (isMoving)
@@ -82,7 +85,6 @@ public class PlayerCharacter : Character
 
         canAttack = false;
         animator.SetTrigger("IsAttack");
-
         StartCoroutine(DelayedAttack());
     }
 
@@ -97,10 +99,13 @@ public class PlayerCharacter : Character
 
     private void SpawnBullet()
     {
-        if (bulletPrefab == null || firePoint == null) return;
+        if (weaponSlot == null || firePoint == null) return;
 
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        bullet.transform.Rotate(-90f, 0f, 0f); // Điều chỉnh nếu model bị lệch
+        Weapon weapon = weaponSlot.GetComponentInChildren<Weapon>();
+        if (weapon == null || weapon.BulletPrefab == null) return;
+
+        GameObject bullet = Instantiate(weapon.BulletPrefab, firePoint.position, firePoint.rotation);
+        bullet.transform.Rotate(-90f, 0f, 0f); // Tuỳ chỉnh hướng nếu đạn bị lệch
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         if (rb != null)
             rb.velocity = firePoint.forward * bulletSpeed;
@@ -114,5 +119,30 @@ public class PlayerCharacter : Character
         animator.SetBool("IsRun", false);
         animator.SetBool(newState, true);
         currentAnimState = newState;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (isDead) return;
+
+        if (collision.collider.CompareTag("Bullet"))
+        {
+            Die();
+            Destroy(collision.gameObject);
+        }
+    }
+
+    private void Die()
+    {
+        isDead = true;
+
+        if (animator != null)
+            animator.SetTrigger("IsDead");
+
+        Stop(); // dừng di chuyển
+        this.enabled = false;
+
+        Destroy(gameObject, 1f);
+        gameObject.tag = "Untagged";
     }
 }

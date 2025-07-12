@@ -9,6 +9,7 @@ public abstract class Character : MonoBehaviour
     [Header("Animation")]
     protected Animator animator;
 
+
     protected virtual void Start()
     {
         animator = GetComponentInChildren<Animator>();
@@ -29,12 +30,12 @@ public abstract class Character : MonoBehaviour
     {
         if (!isMoving) return;
 
-        Debug.Log($"{gameObject.name} stopped moving.");
         isMoving = false;
     }
 
     protected virtual void Attack()
     {
-        Debug.Log($"{gameObject.name} attacked!");
     }
+
+
 }

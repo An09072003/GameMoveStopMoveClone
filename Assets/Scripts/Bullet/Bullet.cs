@@ -8,9 +8,14 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         startPoint = transform.position;
-        Destroy(gameObject, 1f);
 
-        // Bỏ qua va chạm giữa đạn và các đạn khác
+        // Nếu là đạn thật (có owner), thì tự hủy sau 3s
+        if (owner != null)
+        {
+            Destroy(gameObject, 2f);
+        }
+
+        // Bỏ qua va chạm với các đạn khác
         Collider myCollider = GetComponent<Collider>();
         Bullet[] allBullets = FindObjectsOfType<Bullet>();
 
@@ -26,15 +31,15 @@ public class Bullet : MonoBehaviour
         }
     }
 
-
     private void OnCollisionEnter(Collision collision)
     {
-        // Không làm gì nếu va chạm chính chủ
         if (collision.gameObject == owner) return;
 
-        // Nếu va chạm với Player, Bot, hoặc Weapon thì huỷ đạn
-        if (collision.gameObject.CompareTag("Player") ||
-            collision.gameObject.CompareTag("Bot"))
+        // Nếu đụng phải Bot, Player, hoặc đạn khác → huỷ nếu là đạn thật (có owner)
+        if (owner != null &&
+            (collision.gameObject.CompareTag("Player") ||
+             collision.gameObject.CompareTag("Bot") ||
+             collision.gameObject.GetComponent<Bullet>() != null))
         {
             Destroy(gameObject);
         }

@@ -1,4 +1,4 @@
-﻿  using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
@@ -23,6 +23,7 @@ public class BotCharacter : Character
     private bool isAttacking = false;
     private bool isDead = false;
     private bool isWaiting = false;
+    private bool hasAttackedBot = false; // 👈 mới thêm
     private string currentAnimState = "";
 
     protected override void Start()
@@ -50,6 +51,16 @@ public class BotCharacter : Character
 
         if (target != null)
         {
+            string targetTag = target.tag;
+
+            // Nếu là bot và đã bắn rồi thì bỏ qua
+            if (targetTag == "Bot" && hasAttackedBot)
+            {
+                if (!agent.hasPath || agent.remainingDistance <= agent.stoppingDistance)
+                    MoveToRandomPoint();
+                return;
+            }
+
             agent.ResetPath(); // đứng lại
 
             // Quay mặt về phía mục tiêu
@@ -57,7 +68,7 @@ public class BotCharacter : Character
             transform.forward = new Vector3(dir.x, 0, dir.z);
 
             if (!isAttacking)
-                StartCoroutine(AttackRoutine());
+                StartCoroutine(AttackRoutine(targetTag));
         }
         else
         {
@@ -91,14 +102,21 @@ public class BotCharacter : Character
         }
     }
 
-    IEnumerator AttackRoutine()
+    IEnumerator AttackRoutine(string targetTag)
     {
         isAttacking = true;
         Attack(); // animation
         yield return new WaitForSeconds(delayBeforeShoot);
         SpawnBullet();
+
+        if (targetTag == "Bot")
+        {
+            hasAttackedBot = true; // 👈 chỉ bắn 1 lần với bot
+        }
+
         yield return new WaitForSeconds(attackCooldown);
         isAttacking = false;
+        MoveToRandomPoint(); // 👈 chạy tiếp sau khi bắn
     }
 
     protected override void Attack()
@@ -118,7 +136,6 @@ public class BotCharacter : Character
         if (rb != null)
             rb.velocity = firePoint.forward * bulletSpeed;
 
-        // Gắn thông tin chủ nhân để tránh tự bắn chính mình
         Bullet bulletScript = bullet.GetComponent<Bullet>();
         if (bulletScript != null)
         {
@@ -160,40 +177,22 @@ public class BotCharacter : Character
     {
         if (isDead) return;
 
-        if (collision.collider.CompareTag("Weapon"))
+        if (collision.collider.CompareTag("Bullet"))
         {
             Die();
             Destroy(collision.gameObject);
         }
     }
-
+    
     private void Die()
     {
         isDead = true;
-        Debug.Log($"{gameObject.name} đã bị tiêu diệt!");
 
         if (animator != null)
             animator.SetTrigger("IsDead");
 
         Destroy(gameObject, 1f);
-    }
-}
+   
 
-
-public class Constants
-{
-    public class Tags
-    {
-        public const string PLAYER = "Player";
-        public const string BOT = "Bot";
-        public const string WEAPON = "Weapon";
-        public const string BULLET = "Bullet";
-    }
-     public class Animations
-    {
-        public const string IS_IDLE = "IsIdle";
-        public const string IS_RUN = "IsRun";
-        public const string IS_ATTACK = "IsAttack";
-        public const string IS_DEAD = "IsDead";
     }
 }
